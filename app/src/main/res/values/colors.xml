@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-
     <color name="rojo_transparente">#a9b11018</color>
+    <color name="rojo">#b11018</color>
+    <color name="rojo_claro">#d3353d</color>
 
 </resources>

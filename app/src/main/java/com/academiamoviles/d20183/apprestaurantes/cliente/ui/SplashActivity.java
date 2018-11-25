@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 abrirMenuActivity();
             }
-        }, 1000 * 2);
+        }, 1000 * 1); // TODO: cambiar a "2 segundos"
     }
 
     private void abrirMenuActivity() {
