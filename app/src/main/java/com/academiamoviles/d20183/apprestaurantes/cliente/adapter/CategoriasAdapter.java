@@ -37,7 +37,7 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Ca
         holder.tvCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickListener.categoriaClick(objCategoria.getId_categoria());
+                clickListener.categoriaClick(objCategoria);
             }
         });
     }

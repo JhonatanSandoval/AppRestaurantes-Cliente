@@ -1,5 +1,7 @@
 package com.academiamoviles.d20183.apprestaurantes.cliente.ui.contenido;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,15 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.academiamoviles.d20183.apprestaurantes.cliente.R;
 import com.academiamoviles.d20183.apprestaurantes.cliente.adapter.PlatosAdapter;
+import com.academiamoviles.d20183.apprestaurantes.cliente.api.ApiClient;
+import com.academiamoviles.d20183.apprestaurantes.cliente.db.dao.PlatoDAO;
 import com.academiamoviles.d20183.apprestaurantes.cliente.model.PlatoModel;
+import com.academiamoviles.d20183.apprestaurantes.cliente.sp.AppPrefs;
+import com.academiamoviles.d20183.apprestaurantes.cliente.util.Globales;
+import com.academiamoviles.d20183.apprestaurantes.cliente.util.ListaPlatoClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ListaPlatosFragment extends Fragment {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ListaPlatosFragment extends Fragment implements ListaPlatoClickListener {
 
     private View view;
 
@@ -28,10 +39,16 @@ public class ListaPlatosFragment extends Fragment {
     private RecyclerView rvPlatos;
     private PlatosAdapter platosAdapter;
 
+    private AppPrefs appPrefs;
+    private ProgressDialog progressDialog;
+    private PlatoDAO platoDAO;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_lista_platos, container, false);
+        appPrefs = new AppPrefs(getActivity());
+        platoDAO = new PlatoDAO(getActivity());
         return view;
     }
 
@@ -41,50 +58,49 @@ public class ListaPlatosFragment extends Fragment {
 
         enlazarElementos();
         validarUsuarioLogeado();
+        configurarRecyclerView();
+    }
+
+    private void configurarRecyclerView() {
+        platosAdapter = new PlatosAdapter();
+        platosAdapter.setClickListener(this);
+
+        rvPlatos.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvPlatos.setAdapter(platosAdapter);
+
         cargarListaPlatos();
     }
 
     private void cargarListaPlatos() {
-        platosAdapter = new PlatosAdapter();
-        platosAdapter.setPlatos( obtenerListaPlatos() );
+        mostrarLoader();
 
-        rvPlatos.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvPlatos.setAdapter(platosAdapter);
-    }
+        ApiClient.getApiRestService().obtenerPlatosDeCategoria(Globales.categoria.getId_categoria()).enqueue(new Callback<List<PlatoModel>>() {
+            @Override
+            public void onResponse(Call<List<PlatoModel>> call, Response<List<PlatoModel>> response) {
+                cerrarLoader();
+                if (response.isSuccessful()) {
+                    List<PlatoModel> platos = response.body();
+                    if (platos != null && !platos.isEmpty()) {
+                        platosAdapter.setPlatos(platos);
 
-    private List<PlatoModel> obtenerListaPlatos() {
-        List<PlatoModel> platos = new ArrayList<>();
-        platos.add(
-                new PlatoModel("HU768ADS768",
-                        "89AS87DAHSD",
-                        "Lomo Saltado",
-                        "Con chicha",
-                        13.00,
-                        "")
-        );
-        platos.add(
-                new PlatoModel("HU768ADS768",
-                        "89AS87DAHSD",
-                        "Ají de Gallina",
-                        "Buenazo",
-                        10.50,
-                        "")
-        );
-        platos.add(
-                new PlatoModel("HU768ADS768",
-                        "89AS87DAHSD",
-                        "Cevichito mixto",
-                        "Arrrto aji",
-                        15.00,
-                        "")
-        );
+                        platoDAO.eliminarPlatosDeCategoria(Globales.categoria.getId_categoria());
+                        platoDAO.insertarPlatos(platos);
+                    }
+                } else {
+                    mostrarErrorDeRed();
+                }
+            }
 
-        return platos;
+            @Override
+            public void onFailure(Call<List<PlatoModel>> call, Throwable t) {
+                cerrarLoader();
+                mostrarErrorDeRed();
+            }
+        });
     }
 
     private void validarUsuarioLogeado() {
-        boolean logeado = true;
-        if (logeado) {
+        if (appPrefs.isLogeado()) {
             llContenidoLogeado.setVisibility(View.VISIBLE);
             llContenidoNoLogeado.setVisibility(View.GONE);
         } else {
@@ -100,5 +116,30 @@ public class ListaPlatosFragment extends Fragment {
         rvPlatos = view.findViewById(R.id.rvPlatos);
     }
 
+    private void mostrarLoader() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage(getString(R.string.obteniendo_platos));
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+        }
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
 
+    private void cerrarLoader() {
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    private void mostrarErrorDeRed() {
+        Toast.makeText(getActivity(), "Error de red", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void clickPlato(String idPlato) {
+        Intent iDetallePlato = new Intent(getActivity(), DetallePlatoActivity.class);
+        iDetallePlato.putExtra("idPlato", idPlato);
+        getActivity().startActivity(iDetallePlato);
+    }
 }

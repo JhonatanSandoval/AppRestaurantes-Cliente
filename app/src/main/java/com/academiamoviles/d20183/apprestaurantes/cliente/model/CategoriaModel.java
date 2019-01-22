@@ -1,9 +1,17 @@
 package com.academiamoviles.d20183.apprestaurantes.cliente.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CategoriaModel {
 
+    @SerializedName("_id")
     private String id_categoria;
+
+    @SerializedName("nombre")
     private String categoria;
+
+    @SerializedName("descripcion")
+    private String descripcion;
 
     public CategoriaModel() {
     }
@@ -27,5 +35,13 @@ public class CategoriaModel {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

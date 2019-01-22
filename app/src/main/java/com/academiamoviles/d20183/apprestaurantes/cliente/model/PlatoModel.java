@@ -1,13 +1,29 @@
 package com.academiamoviles.d20183.apprestaurantes.cliente.model;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
 public class PlatoModel {
 
+    @SerializedName("_id")
     private String id_plato;
+
+    @SerializedName("categoria_id")
     private String id_categoria;
+
+    @SerializedName("nombre")
     private String nombre_plato;
+
+    @SerializedName("descripcion")
     private String descripcion;
+
+    @SerializedName("precio")
     private double precio;
+
+    @SerializedName("imagen")
     private String imagen;
+
+    private int cantidadOrden = 0;
 
     public PlatoModel() {
     }
@@ -67,5 +83,18 @@ public class PlatoModel {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public int getCantidadOrden() {
+        return cantidadOrden;
+    }
+
+    public void setCantidadOrden(int cantidadOrden) {
+        this.cantidadOrden = cantidadOrden;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

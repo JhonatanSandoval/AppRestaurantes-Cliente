@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlContenido"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="horizontal"
     android:padding="10dp">
 
@@ -14,8 +17,8 @@
     <LinearLayout
         android:id="@+id/llPlato"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_toStartOf="@+id/tvPrecio"
         android:layout_toEndOf="@+id/ivPlato"
         android:orientation="vertical">
@@ -31,8 +34,8 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="Lomo Saltado" />
 
             <TextView
@@ -40,10 +43,10 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:gravity="bottom"
+                android:text="S/ "
                 android:textColor="@color/rojo"
                 android:textSize="26sp"
-                android:textStyle="bold"
-                android:text="S/ " />
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -61,9 +64,9 @@
     <TextView
         android:id="@+id/tvPrecio"
         android:layout_width="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
         android:textColor="@color/rojo"
         android:textSize="30sp"
         android:textStyle="bold"

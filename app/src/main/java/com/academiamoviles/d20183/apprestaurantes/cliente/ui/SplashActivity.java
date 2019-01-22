@@ -1,9 +1,9 @@
 package com.academiamoviles.d20183.apprestaurantes.cliente.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.academiamoviles.d20183.apprestaurantes.cliente.R;
 
@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 abrirMenuActivity();
             }
-        }, 1000 * 1); // TODO: cambiar a "2 segundos"
+        }, 2000 * 1); //
     }
 
     private void abrirMenuActivity() {

@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.academiamoviles.d20183.apprestaurantes.cliente.R;
 import com.academiamoviles.d20183.apprestaurantes.cliente.model.PlatoModel;
+import com.academiamoviles.d20183.apprestaurantes.cliente.util.ListaPlatoClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class PlatosAdapter extends RecyclerView.Adapter<PlatosAdapter.PlatosHolder> {
 
     private List<PlatoModel> platos = new ArrayList<>();
+    private ListaPlatoClickListener clickListener;
 
     public void setPlatos(List<PlatoModel> platos) {
         this.platos = platos;
@@ -39,6 +42,10 @@ public class PlatosAdapter extends RecyclerView.Adapter<PlatosAdapter.PlatosHold
         holder.tvPrecio.setText( String.valueOf(objPlato.getPrecio()) );
     }
 
+    public void setClickListener(ListaPlatoClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     @Override
     public int getItemCount() {
         return platos.size();
@@ -46,6 +53,7 @@ public class PlatosAdapter extends RecyclerView.Adapter<PlatosAdapter.PlatosHold
 
     class PlatosHolder extends RecyclerView.ViewHolder {
 
+        RelativeLayout rlContenido;
         ImageView ivPlato;
         TextView tvNombrePlato;
         TextView tvDescripcion;
@@ -54,6 +62,7 @@ public class PlatosAdapter extends RecyclerView.Adapter<PlatosAdapter.PlatosHold
         public PlatosHolder(View itemView) {
             super(itemView);
 
+            rlContenido = itemView.findViewById(R.id.rlContenido);
             ivPlato = itemView.findViewById(R.id.ivPlato);
             tvNombrePlato = itemView.findViewById(R.id.tvNombrePlato);
             tvDescripcion = itemView.findViewById(R.id.tvDescripcion);

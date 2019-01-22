@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="margen_content_logeado">10dp</dimen>
+    <dimen name="bordes_dialogo">10dp</dimen>
 
 </resources>
